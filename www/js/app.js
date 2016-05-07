@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'ionic.service.core', 'starter.controllers', 'starter.services', 'ionic.service.push'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $ionicPush) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,6 +20,19 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'starter.controllers',
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    $ionicPush.init({
+      "debug": true,
+      "onNotification": function(notification) {
+        var payload = notification.payload;
+        console.log(notification, payload);
+      },
+      "onRegister": function(data) {
+        console.log(data.token);
+      }
+    });
+
+    $ionicPush.register();
 
     /*var io = Ionic.io();
     var push = new Ionic.Push({
@@ -51,20 +64,31 @@ angular.module('starter', ['ionic', 'ionic.service.core', 'starter.controllers',
     push.register(callback);
     */
 
-    var push = new Ionic.Push({
+    /* For prod */
+    /*  var push = new Ionic.Push({
+       "debug": true
+     });
+
+     push.register(function(token) {
+       console.log("Device token:",token.token);
+       push.saveToken(token);  // persist the token in the Ionic Platform
+     });*/
+
+    /* For dev mode */
+    /*var push = new Ionic.Push({
       "debug": true
     });
 
     push.register(function(token) {
       console.log("Device token:", token.token);
-    });
+    });*/
 
     /*This is a working curl call*/
     /*curl -X POST -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjZjdjOGE3Yi1jZmE3LTQ4NDgtODBiMy0yYmRlZDMzOWI1NzQifQ.1F_VAZw55dcKHIcvNdgACEP6GBL4PoZQlZEj68MLm8A" -H "Content-Type: application/json" -d '{
-        "tokens": ["DEV-33aaada4-c437-40f8-b224-0f9bc2627585"],
+        "tokens": ["DEV-96670fe1-c697-4f48-bb6c-cc3d60bf66ef"],
         "profile": "pushnoti",
         "notification": {
-            "message": "Hello Ashish!"
+            "message": "Hello Vishal!"
         }
     }' "https://api.ionic.io/push/notifications"*/
   });
